@@ -1,8 +1,8 @@
-package URI;  # $Date: 2001/04/23 22:45:48 $
+package URI;  # $Date: 2001/07/18 13:43:11 $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.12";
+$VERSION = "1.14";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -11,7 +11,7 @@ my %implements;  # mapping from scheme to implementor class
 # Some "official" character classes
 
 use vars qw($reserved $mark $unreserved $uric $scheme_re);
-$reserved   = q(;/?:@&=+$,);
+$reserved   = q(;/?:@&=+$,[]);
 $mark       = q(-_.!~*'());                                    #'; emacs
 $unreserved = "A-Za-z0-9\Q$mark\E";
 $uric       = quotemeta($reserved) . $unreserved . "%";
@@ -302,7 +302,7 @@ URI - Uniform Resource Identifiers (absolute and relative)
 
 This module implements the C<URI> class.  Objects of this class
 represent "Uniform Resource Identifier references" as specified in RFC
-2396.
+2396 (and updated by RFC 2732).
 
 A Uniform Resource Identifier is a compact string of characters for
 identifying an abstract or physical resource.  A Uniform Resource
@@ -648,8 +648,7 @@ $uri->selector, $uri->search, $uri->string.
 
 =item B<http>:
 
-The I<http> URI scheme is specified in
-<draft-ietf-http-v11-spec-rev-06> (which will become an RFC soon).
+The I<http> URI scheme is specified in RFC 2616.
 The scheme is used to reference resources hosted by HTTP servers.
 
 C<URI> objects belonging to the http scheme support the common,
@@ -665,7 +664,7 @@ port is different.
 =item B<ldap>:
 
 The I<ldap> URI scheme is specified in RFC 2255.  LDAP is the
-Lightweight Directory Access Protocol.  A ldap URI describes an LDAP
+Lightweight Directory Access Protocol.  An ldap URI describes an LDAP
 search operation to perform to retrieve information from an LDAP
 directory.
 
@@ -783,6 +782,14 @@ them. E.g.:
 
    /(...)/ || die;
    $u->query("$1");
+
+=head1 PARSING URIs WITH REGEXP
+
+As an alternative to this module, the following (official) regular
+expression can be used to decode a URI:
+
+  my($scheme, $authority, $path, $query, $fragment) =
+  $uri =~ m|^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
 
 =head1 SEE ALSO
 
