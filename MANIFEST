@@ -10,7 +10,14 @@ URI/data.pm
 URI/http.pm
 URI/https.pm
 URI/mailto.pm
+URI/news.pm
+URI/nntp.pm
+URI/pop.pm
+URI/snews.pm
 t/abs.t
 t/data.t
-t/http.t
 t/generic.t
+t/http.t
+t/mailto.t
+t/news.t
+t/pop.t

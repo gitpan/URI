@@ -1,9 +1,9 @@
-package URI;  # $Id: URI.pm,v 1.7.2.6 1998/09/05 23:52:42 aas Exp $
+package URI;  # $Id: URI.pm,v 1.7.2.11 1998/09/07 23:16:43 aas Exp $
 
 use strict;
 use vars qw($VERSION $DEFAULT_SCHEME $STRICT $DEBUG);
 
-$VERSION = "0.04";
+$VERSION = "0.05";
 
 $DEFAULT_SCHEME ||= "http";
 #$STRICT = 0;
@@ -17,20 +17,17 @@ my $reserved   = q(;/?:@&=+$,);
 my $mark       = q(-_.!~*'());                                    #'; emacs
 my $unreserved = "A-Za-z0-9\Q$mark\E";
 
-use vars qw($uric $pchar $achar $ppchar $scheme_re);
-$uric   = "\Q$reserved\E$unreserved%";
-$pchar  = $uric;  $pchar  =~ s,\\[/?;],,g;
-$achar  = $uric;  $achar  =~ s,\\[/?],,g;
-$ppchar = $uric;  $ppchar =~ s,\\[?],,g;
-
+use vars qw($uric $scheme_re);
+$uric  = "\Q$reserved\E$unreserved%";
 $scheme_re = '[a-zA-Z][a-zA-Z0-9.+\-]*';
-
-#print "$uric\n$achar\n$pchar\n";
 
 use Carp ();
 use URI::Escape ();
 
-use overload ( '""' => 'as_string', 'fallback' => 1 );
+use overload ('""'     => sub { ${$_[0]} },
+	      '=='     => sub { overload::StrVal($_[0]) eq overload::StrVal($_[1]) },
+              fallback => 1,
+             );
 
 sub new
 {
@@ -155,7 +152,7 @@ sub scheme
 	my $newself = URI->new("$new:$$self");
 	$$self = $$newself; 
 	bless $self, ref($newself);
-    } elsif ($$self =~ m/^$scheme_re:/) {
+    } elsif ($$self =~ m/^$scheme_re:/o) {
 	warn "Opaque part look like scheme";
     }
 
@@ -163,7 +160,7 @@ sub scheme
 }
 
 
-sub opaque_part
+sub opaque
 {
     my $self = shift;
 
@@ -226,15 +223,16 @@ sub canonical
     my $self = shift;
 
     # Make sure scheme is lowercased
-    my $scheme = $self->scheme;
-    if ($scheme =~ /[A-Z]/) {
+    my $scheme = $self->scheme || "";
+    my $uc_scheme = $scheme =~ /[A-Z]/;
+    my $lc_esc    = $$self =~ /%(?:[a-f][a-fA-F0-9]|[A-F0-9][a-f])/;
+    if ($uc_scheme || $lc_esc) {
 	my $other = $self->clone;
-	$other->scheme(lc $scheme);
+	$other->scheme(lc $scheme) if $uc_scheme;
+	$$other =~ s/(%(?:[a-f][a-fA-F0-9]|[A-F0-9][a-f]))/uc($1)/ge
+	    if $lc_esc;
 	return $other;
     }
-    # XXX might also want to ensure that we only use either upper or
-    # lower case hex digits in %xx escapes.
-
     $self;
 }
 
@@ -245,6 +243,10 @@ sub eq {
     ref($self) eq ref($other) &&                # same class
 	$self->canonical->as_string eq $other->canonical->as_string;
 }
+
+# generic-URI transformation methods
+sub abs { $_[0]; }
+sub rel { $_[0]; }
 
 1;
 
@@ -274,8 +276,5 @@ sub _bad_access_method
 *path_segments  = \&_bad_access_method;
 *query          = \&_bad_access_method;
 
-# generic-URI transformation methods
-sub abs { shift->clone; }
-sub rel { shift->clone; }
 
 1;
