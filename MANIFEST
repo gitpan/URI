@@ -84,4 +84,3 @@ t/storable-test.pl
 t/urn-isbn.t
 t/urn-oid.t
 uri-test
-META.yml                                 Module meta-data (added by MakeMaker)
