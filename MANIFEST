@@ -35,6 +35,7 @@ URI/pop.pm
 URI/rlogin.pm
 URI/rsync.pm
 URI/snews.pm
+URI/ssh.pm
 URI/telnet.pm
 rfc2396.txt
 t/abs.t

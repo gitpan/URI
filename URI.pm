@@ -1,8 +1,8 @@
-package URI;  # $Date: 2001/09/14 17:31:36 $
+package URI;  # $Date: 2001/12/30 22:30:28 $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.17";
+$VERSION = "1.18";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -730,6 +730,14 @@ port is different.
 An old speficication of the I<telnet> URI scheme is found in RFC
 1738. C<URI> objects belonging to the telnet scheme support the
 common, generic and server methods.
+
+=item B<ssh>:
+
+Information about ssh is available at http://www.openssh.com/.
+C<URI> objects belonging to the ssh scheme support the common,
+generic and server methods. In addition they provide methods to
+access the userinfo sub-components: $uri->user and $uri->password.
+
 
 =back
 
