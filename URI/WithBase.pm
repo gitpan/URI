@@ -6,7 +6,7 @@ use URI;
 
 use overload '""' => "as_string", fallback => 1;
 
-sub as_string;
+sub as_string;  # help overload find it
 
 sub new
 {
@@ -22,11 +22,8 @@ sub new
 sub _init
 {
     my $class = shift;
-    my($str, $base, $scheme) = @_;
-    die "Assertion failed" unless UNIVERSAL::isa($base, "URI::WithBase");
-    $base = $base->abs;
-    my $ibase = $base->[0];
-    bless [URI->new($str, $ibase), $base], $class;
+    my($str, $scheme) = @_;
+    bless [URI->new($str, $scheme), undef], $class;
 }
 
 sub eq
