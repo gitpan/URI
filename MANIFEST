@@ -7,6 +7,7 @@ URI/Escape.pm
 URI/Heuristic.pm
 URI/URL.pm
 URI/WithBase.pm
+URI/_foreign.pm
 URI/_generic.pm
 URI/_login.pm
 URI/_query.pm
@@ -15,6 +16,8 @@ URI/_server.pm
 URI/_userpass.pm
 URI/data.pm
 URI/file.pm
+URI/file/Base.pm
+URI/file/FAT.pm
 URI/file/Mac.pm
 URI/file/OS2.pm
 URI/file/Unix.pm
@@ -33,6 +36,7 @@ URI/telnet.pm
 rfc2396.txt
 t/abs.t
 t/data.t
+t/file.t
 t/generic.t
 t/heuristic.t
 t/http.t
