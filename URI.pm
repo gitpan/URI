@@ -1,8 +1,8 @@
-package URI;  # $Date: 2003/01/02 05:11:26 $
+package URI;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.23";
+$VERSION = "1.24"; # $Date: 2003/07/24 15:23:19 $
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -42,10 +42,12 @@ sub new
     my $impclass;
     if ($uri =~ m/^($scheme_re):/so) {
 	$scheme = $1;
-    } else {
+    }
+    else {
 	if (($impclass = ref($scheme))) {
 	    $scheme = $scheme->scheme;
-	} elsif ($scheme && $scheme =~ m/^($scheme_re)(?::|$)/o) {
+	}
+	elsif ($scheme && $scheme =~ m/^($scheme_re)(?::|$)/o) {
 	    $scheme = $1;
         }
     }
@@ -159,12 +161,14 @@ sub _scheme
 	my $newself = URI->new("$new:$$self");
 	$$self = $$newself; 
 	bless $self, ref($newself);
-    } else {
+    }
+    else {
 	if ($self->_no_scheme_ok) {
 	    $old = $1 if $$self =~ s/^($scheme_re)://o;
 	    Carp::carp("Oops, opaque part now look like scheme")
 		if $^W && $$self =~ m/^$scheme_re:/o
-	} else {
+	}
+	else {
 	    $old = $1 if $$self =~ m/^($scheme_re):/o;
 	}
     }
@@ -858,11 +862,14 @@ As an alternative to this module, the following (official) regular
 expression can be used to decode a URI:
 
   my($scheme, $authority, $path, $query, $fragment) =
-  $uri =~ m|^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
+  $uri =~ m|(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
+
+The C<URI::Split> module provide the function uri_split() as a
+readable alternative.
 
 =head1 SEE ALSO
 
-L<URI::file>, L<URI::WithBase>, L<URI::Escape>, L<URI::Heuristic>
+L<URI::file>, L<URI::WithBase>, L<URI::Escape>, L<URI::Split>, L<URI::Heuristic>
 
 RFC 2396: "Uniform Resource Identifiers (URI): Generic Syntax",
 Berners-Lee, Fielding, Masinter, August 1998.
