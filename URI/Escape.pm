@@ -1,5 +1,5 @@
 #
-# $Id: Escape.pm,v 3.13 1999/03/20 07:34:08 gisle Exp $
+# $Id: Escape.pm,v 3.16 2000/08/16 18:45:23 gisle Exp $
 #
 
 package URI::Escape;
@@ -60,7 +60,7 @@ character class (between [ ]).  E.g.:
 The default set of characters to be escaped is all those which are
 I<not> part of the C<uric> character class shown above.
 
-=item uri_unescape($string)
+=item uri_unescape($string,...)
 
 Returns a string with all %XX sequences replaced with the actual byte
 (octet).
@@ -79,6 +79,9 @@ where unescaped and something like 700% slowdown if none where.  If
 you are going to unescape a lot of times it might be a good idea to
 inline the RE.
 
+If the uri_unescape() function is passed multiple strings, then each
+one is unescaped returned.
+
 =back
 
 The module can also export the C<%escapes> hash which contains the
@@ -93,7 +96,7 @@ L<URI>
 
 =head1 COPYRIGHT
 
-Copyright 1995-1998 Gisle Aas.
+Copyright 1995-2000 Gisle Aas.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
@@ -107,7 +110,7 @@ require Exporter;
 @ISA = qw(Exporter);
 @EXPORT = qw(uri_escape uri_unescape);
 @EXPORT_OK = qw(%escapes);
-$VERSION = sprintf("%d.%02d", q$Revision: 3.13 $ =~ /(\d+)\.(\d+)/);
+$VERSION = sprintf("%d.%02d", q$Revision: 3.16 $ =~ /(\d+)\.(\d+)/);
 
 use Carp ();
 
@@ -145,8 +148,11 @@ sub uri_unescape
     my $str = shift;
     if (@_ && wantarray) {
 	# not executed for the common case of a single argument
-	my @str = @_;  # need to copy
-	return map { s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg } $str, @str;
+	my @str = ($str, @_);  # need to copy
+	foreach (@str) {
+	  s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg
+	}
+	return @str;
     }
     $str =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
     $str;
