@@ -1,8 +1,8 @@
-package URI;  # $Date: 2001/02/27 17:35:13 $
+package URI;  # $Date: 2001/04/23 22:45:48 $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.11";
+$VERSION = "1.12";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -82,7 +82,7 @@ sub _init
 sub implementor
 {
     my($scheme, $impclass) = @_;
-    unless ($scheme) {
+    if (!$scheme || $scheme !~ /\A$scheme_re\z/o) {
 	require URI::_generic;
 	return "URI::_generic";
     }
