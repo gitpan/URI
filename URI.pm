@@ -1,8 +1,8 @@
-package URI;  # $Date: 2002/09/03 03:35:23 $
+package URI;  # $Date: 2003/01/02 05:11:26 $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.22";
+$VERSION = "1.23";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -754,6 +754,12 @@ port is different.
 
 An old speficication of the I<telnet> URI scheme is found in RFC
 1738. C<URI> objects belonging to the telnet scheme support the
+common, generic and server methods.
+
+=item B<tn3270>:
+
+There URIs are used like I<telnet> URIs but for connections to IBM
+mainframes.  C<URI> objects belonging to the tn3270 scheme support the
 common, generic and server methods.
 
 =item B<ssh>:
