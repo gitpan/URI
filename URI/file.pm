@@ -1,10 +1,13 @@
 package URI::file;
 
 use strict;
-use vars qw(@ISA);
+use vars qw(@ISA $VERSION);
 
 require URI::_generic;
 @ISA = qw(URI::_generic);
+$VERSION = sprintf("%d.%02d", q$Revision: 4.13 $ =~ /(\d+)\.(\d+)/);
+
+use URI::Escape qw(uri_unescape);
 
 # Map from $^O values to implementation classes.  The Unix
 # class is the default.
@@ -33,7 +36,7 @@ sub os_class
 }
 
 sub path { shift->path_query(@_) }
-sub host { shift->authority(@_)  }
+sub host { uri_unescape(shift->authority(@_)) }
 
 sub new
 {
@@ -83,10 +86,10 @@ URI::file - URI that map to local file names
 =head1 SYNOPSIS
 
  use URI::file;
-
+ 
  $u1 = URI->new("file:/foo/bar");
  $u2 = URI->new("foo/bar", "file");
-
+ 
  $u3 = URI::file->new($path);
  $u4 = URI::file->new("c:\\windows\\", "win32");
  
@@ -213,7 +216,7 @@ literal "." or "..".  It means that we will map like this:
   <undef>      <==      /
   foo/         <==      file:/foo%2F
   ./foo.txt    <==      file:/.%2Ffoo.txt
-  
+
 Note that if you want a relative URL, you *must* begin the path with a :.  Any
 path that begins with [^:] will be treated as absolute.
 

@@ -1,8 +1,8 @@
-package URI;  # $Date: 2002/05/09 06:49:13 $
+package URI;  # $Date: 2002/07/19 00:46:04 $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.19";
+$VERSION = "1.20";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -713,6 +713,18 @@ An old speficication of the I<rlogin> URI scheme is found in RFC
 1738. C<URI> objects belonging to the rlogin scheme support the
 common, generic and server methods.
 
+=item B<rtsp>:
+
+The I<rtsp> URL specification can be found in section 3.2 of RFC 2326.
+C<URI> objects belonging to the rtsp scheme support the common,
+generic, and server methods, with the exception of userinfo and
+query-related sub-components.
+
+=item B<rtspu>:
+
+The I<rtspu> URI scheme is used to talk to RTSP servers over UDP
+instead of TCP.  The syntax is the same as rtsp.
+
 =item B<rsync>:
 
 Information about rsync is available from http://rsync.samba.org.
@@ -738,9 +750,39 @@ C<URI> objects belonging to the ssh scheme support the common,
 generic and server methods. In addition they provide methods to
 access the userinfo sub-components: $uri->user and $uri->password.
 
+=item B<urn>:
+
+The syntax of Uniform Resource Names is specified in RFC 2141.  C<URI>
+objects belonging to the urn scheme provide the common methods and the
+methods: $uri->nid and $uri->nss that returns the Namespace Identifier
+and the Namespace Specific String respectively.
+
+The Namespace Identifier basically works like the Scheme identifier of
+URIs, and further divides the URN namespace.  Namespace Identifier
+assignments are maintained at
+<http://www.iana.org/assignments/urn-namespaces>.
+
+Letter case is not significant for the Namespace Identifier.  It is
+always returned in lower case by the $uri->nid method.  The $uri->_nid
+method can be used if you want it in its original case.
+
+=item B<urn>:B<isbn>:
+
+The C<urn:isbn:> namespace contains International Standard Book
+Numbers (ISBNs) and is described in RFC 3187.  C<URI> object belonging
+to this namespace has the following extra methods (if the
+Business::ISBN module is available); $uri->isbn,
+$uri->isbn_publisher_code, $uri->isbn_country_code, $uri->isbn_as_ean.
+
+=item B<urn>:B<oid>:
+
+The C<urn:oid:> namespace contains Object Identifiers (OIDs) and is
+described in RFC 3061.  An object identifier is sequences of digits
+separated by dots.  C<URI> object belonging to this namespace has an
+additional method called $uri->oid that can be used to get/set the oid
+value.  In list context oid numbers are returned as separate elements.
 
 =back
-
 
 =head1 CONFIGURATION VARIABLES
 
@@ -775,7 +817,7 @@ examples:
   URI->new("../../../foo")->abs("http://host/a/b")
       ==> "http://host/../../foo"
 
-  local $URI::URL::ABS_REMOTE_LEADING_DOTS = 1;
+  local $URI::ABS_REMOTE_LEADING_DOTS = 1;
   URI->new("../../../foo")->abs("http://host/a/b")
       ==> "http://host/foo"
 
@@ -805,6 +847,10 @@ L<URI::file>, L<URI::WithBase>, L<URI::Escape>, L<URI::Heuristic>
 
 RFC 2396: "Uniform Resource Identifiers (URI): Generic Syntax",
 Berners-Lee, Fielding, Masinter, August 1998.
+
+http://www.iana.org/assignments/uri-schemes
+
+http://www.iana.org/assignments/urn-namespaces
 
 http://www.w3.org/Addressing/
 
