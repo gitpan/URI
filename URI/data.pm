@@ -12,24 +12,30 @@ sub media_type
 {
     my $self = shift;
     my $opaque = $self->opaque_part;
-    $opaque =~ /^([^,]*),/;
+    $opaque =~ /^([^,]*),?/ or die;
     my $old = $1;
     my $base64;
     $base64 = $1 if $old =~ s/(;base64)$//i;
     if (@_) {
 	my $new = shift;
 	$new = "" unless defined $new;
+	$new =~ s/,/%2C/g;  # protect ,
 	$base64 = "" unless defined $base64;
 	$opaque =~ s/^[^,]*,?/$new$base64,/;
 	$self->opaque_part($opaque);
     }
-    $old || "text/plain;charset=US-ASCII";
+    return uri_unescape($old) if $old;  # media_type can't really be "0"
+    "text/plain;charset=US-ASCII";      # default type
 }
 
 sub data
 {
     my $self = shift;
     my($enc, $data) = split(",", $self->opaque_part, 2);
+    unless (defined $data) {
+	$data = "";
+	$enc  = "" unless defined $enc;
+    }
     my $base64 = ($enc =~ /;base64$/i);
     if (@_) {
 	$enc =~ s/;base64$//i if $base64;
