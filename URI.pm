@@ -2,7 +2,7 @@ package URI;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.28"; # $Date: 2003/11/30 13:52:35 $
+$VERSION = "1.29"; # $Date: 2004/01/02 10:19:18 $
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -758,6 +758,20 @@ generic and server methods as well as specific ldap methods; $uri->dn,
 $uri->attributes, $uri->scope, $uri->filter, $uri->extensions.  See
 L<URI::ldap> for details.
 
+=item B<ldapi>:
+
+Like the I<ldap> URI scheme, but will use a Unix domain socket.  The
+server methods are not supported, and the local socket path is
+available as $uri->un_path.  The I<ldapi> scheme is used by the
+OpenLDAP package.  There is no real specification for it, but it is
+mentioned in various OpenLDAP manual pages.
+
+=item B<ldaps>:
+
+Like the I<ldap> URI scheme, but will use an SSL connection.  This
+scheme is deprecated, as the prefered way is to use the I<start_tls>
+mechanism.
+
 =item B<mailto>:
 
 The I<mailto> URI scheme is specified in RFC 2368.  The scheme was
@@ -768,6 +782,13 @@ setting of other mail header fields and the message body.
 C<URI> objects belonging to the mailto scheme support the common
 methods and the generic query methods.  In addition they support the
 following mailto specific methods: $uri->to, $uri->headers.
+
+=item B<mms>:
+
+The I<mms> URL specification can be found at L<http://sdp.ppona.com/>
+C<URI> objects belonging to the mms scheme support the common,
+generic, and server methods, with the exception of userinfo and
+query-related sub-components.
 
 =item B<news>:
 

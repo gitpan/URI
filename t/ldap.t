@@ -1,24 +1,27 @@
 #!perl -w
 
-print "1..15\n";
+print "1..22\n";
 
+use strict;
 use URI;
 
-$url = URI->new("ldap://host/dn=base?cn,sn?sub?objectClass=*");
+my $uri;
 
-print "not " unless $url->host eq "host";
+$uri = URI->new("ldap://host/dn=base?cn,sn?sub?objectClass=*");
+
+print "not " unless $uri->host eq "host";
 print "ok 1\n";
 
-print "not " unless $url->dn eq "dn=base";
+print "not " unless $uri->dn eq "dn=base";
 print "ok 2\n";
 
-print "not " unless join("-",$url->attributes) eq "cn-sn";
+print "not " unless join("-",$uri->attributes) eq "cn-sn";
 print "ok 3\n";
 
-print "not " unless $url->scope eq "sub";
+print "not " unless $uri->scope eq "sub";
 print "ok 4\n";
 
-print "not " unless $url->filter eq "objectClass=*";
+print "not " unless $uri->filter eq "objectClass=*";
 print "ok 5\n";
 
 $uri = URI->new("ldap:");
@@ -85,3 +88,27 @@ print "ok 15\n";
 
 print "$uri\n";
 print $uri->canonical, "\n";
+
+$uri = URI->new("ldaps://host/dn=base?cn,sn?sub?objectClass=*");
+
+print "not " unless $uri->host eq "host";
+print "ok 16\n";
+print "not " unless $uri->port eq 636;
+print "ok 17\n";
+print "not " unless $uri->dn eq "dn=base";
+print "ok 18\n";
+
+$uri = URI->new("ldapi://%2Ftmp%2Fldap.sock/????x-mod=-w--w----");
+print "not " unless $uri->authority eq "%2Ftmp%2Fldap.sock";
+print "ok 19\n";
+print "not " unless $uri->un_path eq "/tmp/ldap.sock";
+print "ok 20\n";
+
+$uri->un_path("/var/x\@foo:bar/");
+print "not " unless $uri eq "ldapi://%2Fvar%2Fx%40foo%3Abar%2F/????x-mod=-w--w----";
+print "ok 21\n";
+
+%ext = $uri->extensions;
+print "not " unless $ext{"x-mod"} eq "-w--w----";
+print "ok 22\n";
+
