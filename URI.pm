@@ -1,31 +1,31 @@
-package URI;  # $Id: URI.pm,v 1.7.2.11 1998/09/07 23:16:43 aas Exp $
+package URI;  # $Id: URI.pm,v 1.7.2.16 1998/09/08 13:36:45 aas Exp $
 
 use strict;
 use vars qw($VERSION $DEFAULT_SCHEME $STRICT $DEBUG);
 
-$VERSION = "0.05";
+$VERSION = "0.06";
 
 $DEFAULT_SCHEME ||= "http";
-#$STRICT = 0;
-#$DEBUG = 0;
-$DEBUG = 1;
 
 my %implements;  # mapping from scheme to implementor class
 
 # Some "official" character classes
-my $reserved   = q(;/?:@&=+$,);
-my $mark       = q(-_.!~*'());                                    #'; emacs
-my $unreserved = "A-Za-z0-9\Q$mark\E";
 
-use vars qw($uric $scheme_re);
-$uric  = "\Q$reserved\E$unreserved%";
-$scheme_re = '[a-zA-Z][a-zA-Z0-9.+\-]*';
+use vars qw($reserved $mark $unreserved $uric $scheme_re);
+$reserved   = q(;/?:@&=+$,);
+$mark       = q(-_.!~*'());                                    #'; emacs
+$unreserved = "A-Za-z0-9\Q$mark\E";
+$uric       = quotemeta($reserved) . $unreserved . "%";
+
+$scheme_re  = '[a-zA-Z][a-zA-Z0-9.+\-]*';
 
 use Carp ();
 use URI::Escape ();
 
 use overload ('""'     => sub { ${$_[0]} },
-	      '=='     => sub { overload::StrVal($_[0]) eq overload::StrVal($_[1]) },
+	      '=='     => sub { overload::StrVal($_[0]) eq
+                                overload::StrVal($_[1])
+                              },
               fallback => 1,
              );
 
@@ -35,7 +35,6 @@ sub new
     my $self;
     if (ref $url) {
 	$self = $url->clone;
-	$self->base($base) if $base
     } else {
 	$url = "" unless defined $url;
 	# Get rid of potential wrapping
@@ -46,12 +45,13 @@ sub new
 
 	# We need a scheme to determine which class to use
         my $scheme;
+	my $impclass;
 	if ($url =~ m/^($scheme_re):/so) {
 	    $scheme = $1;
 	} else {
-            if (ref $base){
-                $scheme = $base->scheme;
-	    } elsif ($base && $base =~ m/^($scheme_re):/o) {
+            if ($impclass = ref($base)) {
+		$scheme = $base->scheme;
+	    } elsif ($base && $base =~ m/^($scheme_re)(?::|$)/o) {
                 $scheme = $1;
 	    } elsif ($DEFAULT_SCHEME && !$STRICT) {
 		$scheme = $DEFAULT_SCHEME;
@@ -59,14 +59,15 @@ sub new
 		Carp::croak("Unable to determine scheme for '$url'");
 	    }
         }
-	my $impclass = implementor($scheme);
-        unless ($impclass) {
-            Carp::croak("URI scheme '$scheme' is not supported")
-		if $STRICT;
+	$impclass ||= implementor($scheme) ||
+	    do {
+		Carp::croak("URI scheme '$scheme' is not supported")
+		    if $STRICT;
 	    
-	    require URI::_generic;
-	    $impclass = 'URI::_generic';
-        }
+		require URI::_generic;
+		$impclass = 'URI::_generic';
+	    };
+
         # hand-off to scheme specific implementation sub-class
         $self = $impclass->_init($url, $base, $scheme);
     }
@@ -148,12 +149,12 @@ sub scheme
 
     my $new = shift;
     if (defined($new) && length($new)) {
-	die "Bad scheme '$new'" unless $new =~ /^$scheme_re$/o;
+	Carp::croak("Bad scheme '$new'") unless $new =~ /^$scheme_re$/o;
 	my $newself = URI->new("$new:$$self");
 	$$self = $$newself; 
 	bless $self, ref($newself);
     } elsif ($$self =~ m/^$scheme_re:/o) {
-	warn "Opaque part look like scheme";
+	Carp::carp("Opaque part look like scheme") if $^W;
     }
 
     return $old;
@@ -182,8 +183,7 @@ sub opaque
     $new_opaque = "" unless defined $new_opaque;
     $new_opaque =~ s/([^$uric])/$URI::Escape::escapes{$1}/go;
 
-    $$self = "";
-    $$self .= $old_scheme if defined $old_scheme;
+    $$self = defined($old_scheme) ? $old_scheme : "";
     $$self .= $new_opaque;
     $$self .= $old_frag if defined $old_frag;
 
