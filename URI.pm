@@ -1,9 +1,10 @@
-package URI;  # $Id: URI.pm,v 1.7.2.16 1998/09/08 13:36:45 aas Exp $
+package URI;  # $Id: URI.pm,v 1.7.2.19 1998/09/09 11:45:01 aas Exp $
 
 use strict;
 use vars qw($VERSION $DEFAULT_SCHEME $STRICT $DEBUG);
+use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
-$VERSION = "0.06";
+$VERSION = "0.07";
 
 $DEFAULT_SCHEME ||= "http";
 
@@ -104,6 +105,12 @@ sub implementor
     # scheme not yet known, look for internal or
     # preloaded (with 'use') implementation
     $ic = "URI::$scheme";  # default location
+
+    # turn scheme into a valid perl identifier by a simple tranformation...
+    $ic =~ s/\+/_P/g;
+    $ic =~ s/\./_O/g;
+    $ic =~ s/\-/_/g;
+
     no strict 'refs';
     # check we actually have one for the scheme:
     unless (defined @{"${ic}::ISA"}) {
@@ -135,7 +142,7 @@ sub clone
 }
 
 
-sub scheme
+sub _scheme
 {
     my $self = shift;
 
@@ -158,6 +165,13 @@ sub scheme
     }
 
     return $old;
+}
+
+sub scheme
+{
+    my $scheme = shift->_scheme(@_);
+    return unless defined $scheme;
+    lc($scheme);
 }
 
 
@@ -189,6 +203,8 @@ sub opaque
 
     $old_opaque;
 }
+
+*path = \&opaque;  # alias
 
 
 sub fragment
@@ -223,12 +239,12 @@ sub canonical
     my $self = shift;
 
     # Make sure scheme is lowercased
-    my $scheme = $self->scheme || "";
+    my $scheme = $self->_scheme || "";
     my $uc_scheme = $scheme =~ /[A-Z]/;
     my $lc_esc    = $$self =~ /%(?:[a-f][a-fA-F0-9]|[A-F0-9][a-f])/;
     if ($uc_scheme || $lc_esc) {
 	my $other = $self->clone;
-	$other->scheme(lc $scheme) if $uc_scheme;
+	$other->_scheme(lc $scheme) if $uc_scheme;
 	$$other =~ s/(%(?:[a-f][a-fA-F0-9]|[A-F0-9][a-f]))/uc($1)/ge
 	    if $lc_esc;
 	return $other;
