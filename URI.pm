@@ -1,8 +1,8 @@
-package URI;  # $Id: URI.pm,v 1.29 1999/08/02 22:45:52 gisle Exp $
+package URI;  # $Id: URI.pm,v 1.31 2000/02/14 15:30:32 gisle Exp $
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.04";
+$VERSION = "1.05";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -714,6 +714,13 @@ An old speficication of the I<rlogin> URI scheme is found in RFC
 1738. C<URI> objects belonging to the rlogin scheme support the
 common, generic and server methods.
 
+=item B<rsync>:
+
+Information about rsync is available from http://rsync.samba.org.
+C<URI> objects belonging to the rsync scheme support the common,
+generic and server methods.  In addition they provide methods to
+access the userinfo sub-components: $uri->user and $uri->password.
+
 =item B<snews>:
 
 See I<news> scheme.  It's syntax is the same as news, but the default
@@ -778,7 +785,7 @@ Berners-Lee, Fielding, Masinter, August 1998.
 
 =head1 COPYRIGHT
 
-Copyright 1995-1999 Gisle Aas.
+Copyright 1995-2000 Gisle Aas.
 
 Copyright 1995 Martijn Koster.
 
