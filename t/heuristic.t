@@ -1,6 +1,10 @@
+if (-f "OFFLINE") {
+   print "1..0";
+   exit;
+}
+
 print "1..14\n";
 
-$^O ="";
 use URI::Heuristic qw(uf_urlstr uf_url);
 $URI::Heuristic::DEBUG++;
 open(STDERR, ">&STDOUT");  # redirect STDERR
