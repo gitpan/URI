@@ -1,7 +1,3 @@
-#
-# $Id: Escape.pm,v 3.28 2004/11/05 13:58:31 gisle Exp $
-#
-
 package URI::Escape;
 use strict;
 
@@ -147,9 +143,9 @@ use vars qw(%escapes);
 
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw(uri_escape uri_unescape);
-@EXPORT_OK = qw(%escapes uri_escape_utf8);
-$VERSION = sprintf("%d.%02d", q$Revision: 3.28 $ =~ /(\d+)\.(\d+)/);
+@EXPORT = qw(uri_escape uri_unescape uri_escape_utf8);
+@EXPORT_OK = qw(%escapes);
+$VERSION = "3.29";
 
 use Carp ();
 
@@ -213,6 +209,10 @@ sub uri_unescape
     }
     $str =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg if defined $str;
     $str;
+}
+
+sub escape_char {
+    return join '', @URI::Escape::escapes{$_[0] =~ /(\C)/g};
 }
 
 1;

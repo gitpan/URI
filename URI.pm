@@ -2,7 +2,7 @@ package URI;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.35"; # $Date: 2004/11/05 14:17:33 $
+$VERSION = "1.36";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME);
 
@@ -73,7 +73,8 @@ sub _init
 {
     my $class = shift;
     my($str, $scheme) = @_;
-    $str =~ s/([^$uric\#])/$URI::Escape::escapes{$1}/go;
+    # find all funny characters and encode the bytes.
+    $str =~ s*([^$uric\#])* URI::Escape::escape_char($1) *ego;
     $str = "$scheme:$str" unless $str =~ /^$scheme_re:/o ||
                                  $class->_no_scheme_ok;
     my $self = bless \$str, $class;
@@ -204,7 +205,7 @@ sub opaque
 
     my $new_opaque = shift;
     $new_opaque = "" unless defined $new_opaque;
-    $new_opaque =~ s/([^$uric])/$URI::Escape::escapes{$1}/go;
+    $new_opaque =~ s/([^$uric])/ URI::Escape::escape_char($1)/ego;
 
     $$self = defined($old_scheme) ? $old_scheme : "";
     $$self .= $new_opaque;
@@ -229,7 +230,7 @@ sub fragment
 
     my $new_frag = shift;
     if (defined $new_frag) {
-	$new_frag =~ s/([^$uric])/$URI::Escape::escapes{$1}/go;
+	$new_frag =~ s/([^$uric])/ URI::Escape::escape_char($1) /ego;
 	$$self .= "#$new_frag";
     }
     $old;
@@ -907,7 +908,8 @@ The C<urn:isbn:> namespace contains International Standard Book
 Numbers (ISBNs) and is described in RFC 3187.  A C<URI> object belonging
 to this namespace has the following extra methods (if the
 Business::ISBN module is available): $uri->isbn,
-$uri->isbn_publisher_code, $uri->isbn_country_code, $uri->isbn_as_ean.
+$uri->isbn_publisher_code, $uri->isbn_group_code (formerly isbn_country_code,
+which is still supported by issues a deprecation warning), $uri->isbn_as_ean.
 
 =item B<urn>:B<oid>:
 
@@ -995,7 +997,7 @@ http://www.w3.org/Addressing/
 
 =head1 COPYRIGHT
 
-Copyright 1995-2003 Gisle Aas.
+Copyright 1995-2004,2008 Gisle Aas.
 
 Copyright 1995 Martijn Koster.
 

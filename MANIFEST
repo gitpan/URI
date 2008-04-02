@@ -54,11 +54,13 @@ URI/urn/oid.pm
 rfc2396.txt
 t/abs.t
 t/clone.t
+t/cwd.t
 t/data.t
 t/escape.t
 t/file.t
 t/ftp.t
 t/generic.t
+t/gopher.t
 t/heuristic.t
 t/http.t
 t/ldap.t
@@ -89,4 +91,6 @@ t/storable.t
 t/storable-test.pl
 t/urn-isbn.t
 t/urn-oid.t
+t/utf8.t
 uri-test
+META.yml                                 Module meta-data (added by MakeMaker)
