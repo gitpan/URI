@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               URI
-version:            1.40
+version:            1.50
 abstract:           Uniform Resource Identifiers (absolute and relative)
 author:
     - Gisle Aas <gisle@activestate.com>
