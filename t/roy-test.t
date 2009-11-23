@@ -1,31 +1,30 @@
 #!perl -w
 
-print "1..102\n";
-
-if (-d "t") {
-   chdir("t") || die "Can't chdir 't': $!";
-   # fix all relative library locations
-   foreach (@INC) {
-      $_ = "../$_" unless m,^/,;
-   }
-}
+use strict;
+use Test qw(plan ok);
+plan tests => 102;
 
 use URI;
-$no = 1;
+use File::Spec::Functions qw(catfile);
 
-for $i (1..5) {
-   my $file = "roytest$i.html";
+my $no = 1;
+
+my @prefix;
+push(@prefix, "t") if -d "t";
+
+for my $i (1..5) {
+   my $file = catfile(@prefix, "roytest$i.html");
 
    open(FILE, $file) || die "Can't open $file: $!";
    print "# $file\n";
-   $base = undef;
+   my $base = undef;
    while (<FILE>) {
        if (/^<BASE href="([^"]+)">/) {
            $base = URI->new($1);
        } elsif (/^<a href="([^"]*)">.*<\/a>\s*=\s*(\S+)/) {
            die "Missing base at line $." unless $base;	    
-           $link = $1;
-           $exp  = $2;
+           my $link = $1;
+           my $exp  = $2;
            $exp = $base if $exp =~ /current/;  # special case test 22
 
 	   # rfc2396bis restores the rfc1808 behaviour
@@ -36,13 +35,8 @@ for $i (1..5) {
 	       $exp = "http://a/b/c/d;p?y";
 	   }
 
-           $abs  = URI->new($link)->abs($base);
-           unless ($abs eq $exp) {
-              print "$file:$.:  Expected: $exp\n";
-              print qq(  abs("$link","$base") ==> "$abs"\n);
-              print "not ";
-           }
-           print "ok $no\n";
+	   ok(URI->new($link)->abs($base), $exp);
+
            $no++;
        }
    }
