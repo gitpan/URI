@@ -2,7 +2,7 @@ package URI;
 
 use strict;
 use vars qw($VERSION);
-$VERSION = "1.51";
+$VERSION = "1.52";
 
 use vars qw($ABS_REMOTE_LEADING_DOTS $ABS_ALLOW_RELATIVE_SCHEME $DEFAULT_QUERY_FORM_DELIMITER);
 
@@ -260,22 +260,13 @@ sub as_iri
 {
     my $self = shift;
     my $str = $$self;
-    if ($str =~ /\bxn--/ && $self->can("ihost")) {
-	my $ihost = $self->ihost;
-	if ($ihost) {
-	    my $u = $self->clone;
-	    $u->host("%%host%%");
-	    $str = $u->as_string;
-	    $str =~ s/%%host%%/$ihost/;
-	}
-    }
-    if ($str =~ s/%([89A-F][0-9A-F])/chr(hex($1))/eg) {
+    if ($str =~ s/%([89a-fA-F][0-9a-fA-F])/chr(hex($1))/eg) {
 	# All this crap because the more obvious:
 	#
 	#   Encode::decode("UTF-8", $str, sub { sprintf "%%%02X", shift })
 	#
-	# doesn't work.  Apparently passing a sub as CHECK only works
-	# for 'ascii' and similar direct encodings.
+	# doesn't work before Encode 2.39.  Wait for a standard release
+	# to bundle that version.
 
 	require Encode;
 	my $enc = Encode::find_encoding("UTF-8");
