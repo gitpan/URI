@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               URI
-version:            1.52
+version:            1.53
 abstract:           Uniform Resource Identifiers (absolute and relative)
 author:
     - Gisle Aas <gisle@activestate.com>
@@ -12,7 +12,7 @@ build_requires:
     ExtUtils::MakeMaker:  0
 requires:
     MIME::Base64:  2
-    perl:          5.004
+    perl:          5.006001
 resources:
     MailingList:  mailto:libwww@perl.org
     repository:   http://gitorious.org/projects/perl-uri
