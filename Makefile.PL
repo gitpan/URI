@@ -1,4 +1,4 @@
-require 5.006001;
+require 5.008001;
 use ExtUtils::MakeMaker;
 
 if ("foo" !~ /\Afoo\z/) {
@@ -22,7 +22,7 @@ WriteMakefile(
     'ABSTRACT'     => 'Uniform Resource Identifiers (absolute and relative)',
     'AUTHOR'       => 'Gisle Aas <gisle@activestate.com>',
     'LICENSE'      => 'perl',
-    'MIN_PERL_VERSION' => 5.006001,
+    'MIN_PERL_VERSION' => 5.008001,
     'PREREQ_PM'    => {	
 	'MIME::Base64' => 2,
     },
@@ -34,6 +34,11 @@ WriteMakefile(
             'repository' => 'http://gitorious.org/projects/perl-uri',
             'MailingList' => 'mailto:libwww@perl.org',
         }
+    },
+    BUILD_REQUIRES => {
+	'ExtUtils::MakeMaker' => 0,
+	'Test' => 0,
+	'Test::More' => 0,
     },
 );
 

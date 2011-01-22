@@ -12,7 +12,7 @@ BEGIN {
     };
 }
 
-print "1..20\n";
+print "1..26\n";
 
 use URI::Heuristic qw(uf_urlstr uf_url);
 if (shift) {
@@ -116,4 +116,22 @@ print "ok 13\n";
 
     print "not " unless uf_urlstr("123.3.3.3:8080/foo") eq "http://123.3.3.3:8080/foo";
     print "ok 20\n";
+
+    print "not " unless uf_urlstr("123.3.3.3:443/foo") eq "https://123.3.3.3:443/foo";
+    print "ok 21\n";
+
+    print "not " unless uf_urlstr("123.3.3.3:21/foo") eq "ftp://123.3.3.3:21/foo";
+    print "ok 22\n";
+
+    print "not " unless uf_url("FTP.example.com")->scheme eq "ftp";
+    print "ok 23\n";
+
+    print "not " unless uf_url("ftp2.example.com")->scheme eq "ftp";
+    print "ok 24\n";
+
+    print "not " unless uf_url("ftp")->scheme eq "ftp";
+    print "ok 25\n";
+
+    print "not " unless uf_url("https.example.com")->scheme eq "https";
+    print "ok 26\n";
 }
