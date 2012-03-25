@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               URI
-version:            1.59
+version:            1.60
 abstract:           Uniform Resource Identifiers (absolute and relative)
 author:
     - Gisle Aas <gisle@activestate.com>
@@ -17,7 +17,7 @@ requires:
     perl:          5.008001
 resources:
     MailingList:  mailto:libwww@perl.org
-    repository:   http://gitorious.org/projects/perl-uri
+    repository:   https://github.com/libwww-perl/uri
 no_index:
     directory:
         - t
