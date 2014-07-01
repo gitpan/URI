@@ -105,7 +105,7 @@ sub eparams
 {
     my $self = shift;
     my @p = $self->path_segments;
-    return unless ref($p[-1]);
+    return undef unless ref($p[-1]);
     @p = @{$p[-1]};
     shift @p;
     join(";", @p);
@@ -144,7 +144,7 @@ sub query {
 		Carp::croak("$mess (you must call equery)");
 	    }
 	}
-	# Now it should be safe to unescape the string without loosing
+	# Now it should be safe to unescape the string without losing
 	# information
 	return uri_unescape($old);
     }
