@@ -25,7 +25,7 @@
             "ExtUtils::MakeMaker" : "0",
             "File::Temp" : "0",
             "Test" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0.88"
          }
       },
       "configure" : {
@@ -38,8 +38,11 @@
             "Business::ISBN" : "0"
          },
          "requires" : {
+            "Exporter" : "5.57",
             "MIME::Base64" : "2",
-            "perl" : "5.008001"
+            "parent" : "0",
+            "perl" : "5.008001",
+            "utf8" : "0"
          }
       }
    },
@@ -50,5 +53,5 @@
       },
       "x_MailingList" : "mailto:libwww@perl.org"
    },
-   "version" : "1.61"
+   "version" : "1.62"
 }

@@ -1,5 +1,7 @@
 package URI::Escape;
+
 use strict;
+use warnings;
 
 =head1 NAME
 
@@ -135,8 +137,7 @@ it under the same terms as Perl itself.
 
 =cut
 
-require Exporter;
-our @ISA = qw(Exporter);
+use Exporter 'import';
 our %escapes;
 our @EXPORT = qw(uri_escape uri_unescape uri_escape_utf8);
 our @EXPORT_OK = qw(%escapes);
@@ -201,8 +202,15 @@ sub uri_unescape {
     $str;
 }
 
+# XXX FIXME escape_char is buggy as it assigns meaning to the string's storage format.
 sub escape_char {
-    return join '', @URI::Escape::escapes{$_[0] =~ /(\C)/g};
+    if (utf8::is_utf8($_[0])) {
+        my $s = $_[0];
+        utf8::encode($s);
+        unshift(@_, $s);
+    }
+
+    return join '', @URI::Escape::escapes{$_[0] =~ /(.)/sg};
 }
 
 1;

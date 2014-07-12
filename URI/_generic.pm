@@ -1,9 +1,10 @@
 package URI::_generic;
-require URI;
-require URI::_query;
-@ISA=qw(URI URI::_query);
 
 use strict;
+use warnings;
+
+use parent qw(URI URI::_query);
+
 use URI::Escape qw(uri_unescape);
 use Carp ();
 

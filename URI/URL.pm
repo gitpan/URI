@@ -1,19 +1,17 @@
 package URI::URL;
 
-require URI::WithBase;
-@ISA=qw(URI::WithBase);
-
 use strict;
-use vars qw(@EXPORT $VERSION);
+use warnings;
 
-$VERSION = "5.04";
+use parent 'URI::WithBase';
+
+our $VERSION = "5.04";
 
 # Provide as much as possible of the old URI::URL interface for backwards
 # compatibility...
 
-require Exporter;
-*import = \&Exporter::import;
-@EXPORT = qw(url);
+use Exporter 'import';
+our @EXPORT = qw(url);
 
 # Easy to use constructor
 sub url ($;$) { URI::URL->new(@_); }

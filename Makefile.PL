@@ -10,6 +10,9 @@ WriteMakefile(
     'MIN_PERL_VERSION' => 5.008001,
     'PREREQ_PM'    => {
         'MIME::Base64' => 2,
+        'parent'       => '0',
+        'Exporter'     => '5.57',
+        'utf8'         => '0',
     },
     'META_MERGE' => {
         'recommends' => {
@@ -23,7 +26,7 @@ WriteMakefile(
     BUILD_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
         'Test' => 0,
-        'Test::More' => 0,
+        'Test::More' => 0.88,
         'File::Temp' => 0,
     },
 );

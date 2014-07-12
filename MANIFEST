@@ -1,3 +1,4 @@
+.ackrc
 Changes
 Makefile.PL
 MANIFEST
@@ -6,6 +7,7 @@ t/abs.t
 t/clone.t
 t/cwd.t
 t/data.t
+t/escape-char.t
 t/escape.t
 t/file.t
 t/ftp.t
