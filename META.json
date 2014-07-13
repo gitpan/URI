@@ -4,7 +4,7 @@
       "Gisle Aas <gisle@activestate.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.141520",
+   "generated_by" : "ExtUtils::MakeMaker version 6.9904, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
    ],
@@ -53,5 +53,5 @@
       },
       "x_MailingList" : "mailto:libwww@perl.org"
    },
-   "version" : "1.62"
+   "version" : "1.63"
 }
