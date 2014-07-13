@@ -3,7 +3,7 @@
    "author" : [
       "Gisle Aas <gisle@activestate.com>"
    ],
-   "dynamic_config" : 1,
+   "dynamic_config" : 0,
    "generated_by" : "ExtUtils::MakeMaker version 6.9904, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
@@ -20,14 +20,6 @@
       ]
    },
    "prereqs" : {
-      "build" : {
-         "requires" : {
-            "ExtUtils::MakeMaker" : "0",
-            "File::Temp" : "0",
-            "Test" : "0",
-            "Test::More" : "0.88"
-         }
-      },
       "configure" : {
          "requires" : {
             "ExtUtils::MakeMaker" : "0"
@@ -44,14 +36,27 @@
             "perl" : "5.008001",
             "utf8" : "0"
          }
+      },
+      "test" : {
+         "requires" : {
+            "File::Temp" : "0",
+            "Test" : "0",
+            "Test::More" : "0.96"
+         }
       }
    },
    "release_status" : "stable",
    "resources" : {
+      "bugtracker" : {
+         "mailto" : "bug-URI@rt.cpan.org",
+         "web" : "https://rt.cpan.org/Public/Dist/Display.html?Name=URI"
+      },
       "repository" : {
-         "url" : "https://github.com/libwww-perl/uri"
+         "type" : "git",
+         "url" : "https://github.com/libwww-perl/uri.git",
+         "web" : "https://github.com/libwww-perl/uri"
       },
       "x_MailingList" : "mailto:libwww@perl.org"
    },
-   "version" : "1.63"
+   "version" : "1.64"
 }

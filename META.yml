@@ -3,13 +3,12 @@ abstract: 'Uniform Resource Identifiers (absolute and relative)'
 author:
   - 'Gisle Aas <gisle@activestate.com>'
 build_requires:
-  ExtUtils::MakeMaker: '0'
   File::Temp: '0'
   Test: '0'
-  Test::More: '0.88'
+  Test::More: '0.96'
 configure_requires:
   ExtUtils::MakeMaker: '0'
-dynamic_config: 1
+dynamic_config: 0
 generated_by: 'ExtUtils::MakeMaker version 6.9904, CPAN::Meta::Converter version 2.141520'
 license: perl
 meta-spec:
@@ -30,5 +29,6 @@ requires:
   utf8: '0'
 resources:
   MailingList: mailto:libwww@perl.org
-  repository: https://github.com/libwww-perl/uri
-version: '1.63'
+  bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=URI
+  repository: https://github.com/libwww-perl/uri.git
+version: '1.64'
