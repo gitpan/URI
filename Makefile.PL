@@ -11,7 +11,7 @@ my %WriteMakefileArgs = (
     VERSION_FROM        => 'URI.pm',
     ABSTRACT_FROM       => 'URI.pm',
     AUTHOR              => 'Gisle Aas <gisle@activestate.com>',
-    LICENSE             => 'perl',
+    LICENSE             => 'perl_5',
 
     META_MERGE => {
         'meta-spec' => { version => 2 },
@@ -43,6 +43,7 @@ my %WriteMakefileArgs = (
                     'parent'        => '0',
                     'Exporter'      => '5.57',
                     'utf8'          => '0',
+                    'Scalar::Util'  => '0',
                     'perl'          => '5.008001',
                 },
                 recommends => {

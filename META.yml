@@ -9,7 +9,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 0
-generated_by: 'ExtUtils::MakeMaker version 6.9904, CPAN::Meta::Converter version 2.141520'
+generated_by: 'ExtUtils::MakeMaker version 7, CPAN::Meta::Converter version 2.142690'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,6 +24,7 @@ recommends:
 requires:
   Exporter: '5.57'
   MIME::Base64: '2'
+  Scalar::Util: '0'
   parent: '0'
   perl: '5.008001'
   utf8: '0'
@@ -31,4 +32,4 @@ resources:
   MailingList: mailto:libwww@perl.org
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=URI
   repository: https://github.com/libwww-perl/uri.git
-version: '1.64'
+version: '1.65'
